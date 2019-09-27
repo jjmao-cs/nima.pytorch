@@ -13,8 +13,6 @@ source ./env/bin/activate
 pip install -r requirements/linux_gpu.txt
 ```
 
-or You can just use ready [Dockerfile](./Dockerfile)
-
 
 ## Dataset
 
