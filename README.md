@@ -1,111 +1,99 @@
-# PyTorch NIMA: Neural IMage Assessment
+# The origin Author's README
+[Link](origin_README)
 
-PyTorch implementation of [Neural IMage Assessment](https://arxiv.org/abs/1709.05424) by Hossein Talebi and Peyman Milanfar. You can learn more from [this post at Google Research Blog](https://research.googleblog.com/2017/12/introducing-nima-neural-image-assessment.html). 
+# Pytroch NIMA Additional Files
 
+## Index
+  * [train script (run_train.sh)](#train-script)
+  * [environment variable script (var.sh)](#environment-variable-script)
+  * [draw.py](#draw-py)
+  *  [get_adjust.py](#getadjust-py)
+  *  [get_high.py](#gethigh-py)
+  *  [opt4.py](#opt4-py)
+  *  [tmpXXX folders](#tmpxxx-floders)
+  *  nima/
+      - [nima_new.py](#nimanimanew-py)
+      - [nima_adjust.py](#nimanimaadjust-py)
 
-## Installing
+### train script
+    A linux script that includes the main training script needed.
+    Contains 'prepare_dataset' and 'train_model' command in the origin author cli.py
 
-```bash
-git clone https://github.com/truskovskiyk/nima.pytorch.git 
-cd nima.pytorch
-virtualenv -p python3.6 env
-source ./env/bin/activate
-pip install -r requirements/linux_gpu.txt
-```
+    NOTICE:
+      1. Before command line echo prepare, there should echo "Done" first.
+      2. The training progress will not echo to command, if needed, refer to linux official command instructions.
 
+### environment variable script
+    A linux script that includes the setting of environment variable the train_model and test_model required.
 
-## Dataset
-
-The model was trained on the [AVA (Aesthetic Visual Analysis) dataset](http://refbase.cvc.uab.es/files/MMP2012a.pdf)
-You can get it from [here](https://github.com/mtobeiyf/ava_downloader)
-Here are some examples of images with theire scores 
-![result1](https://3.bp.blogspot.com/-_BuiLfAsHGE/WjgoftooRiI/AAAAAAAACR0/mB3tOfinfgA5Z7moldaLIGn92ounSOb8ACLcBGAs/s1600/image2.png)
-
-## Model 
-
-Used MobileNetV2 architecture as described in the paper [Inverted Residuals and Linear Bottlenecks: Mobile Networks for Classification, Detection and Segmentation](https://arxiv.org/pdf/1801.04381).
-
-## Pre-train model  
-
-You can use this [pretrain-model](https://s3-us-west-1.amazonaws.com/models-nima/pretrain-model.pth) with
-```bash
-val_emd_loss = 0.079
-test_emd_loss = 0.080
-```
-## Deployment
-
-Deployed model on [heroku](https://www.heroku.com/) URL is https://neural-image-assessment.herokuapp.com/ You can use it for testing in Your own images, but pay attention, that's free service, so it cannot handel too many requests. Here is simple curl command to test deployment models
-```bash
-curl  -X POST -F "file=@123.jpg" https://neural-image-assessment.herokuapp.com/api/get_scores
-```
-Please use our [swagger](https://neural-image-assessment.herokuapp.com/apidocs) for interactive testing 
+    NOTICE:
+      1. Before the script used, the folder name of the tmp directory should be modify. (Please the "$PATH_TO_CSV" line)
 
 
-## Usage
-```bash
-export PYTHONPATH=.
-export PATH_TO_AVA_TXT=/storage/DATA/ava/AVA.txt
-export PATH_TO_IMAGES=/storage/DATA/images/
-export PATH_TO_CSV=/storage/DATA/ava/
-export BATCH_SIZE=16
-export NUM_WORKERS=2
-export NUM_EPOCH=50
-export INIT_LR=0.0001
-export EXPERIMENT_DIR_NAME=/storage/experiment_n0001
-```
-Clean and prepare dataset
-```bash
-python nima/cli.py prepare_dataset --path_to_ava_txt $PATH_TO_AVA_TXT \
-                                    --path_to_save_csv $PATH_TO_CSV \
-                                    --path_to_images $PATH_TO_IMAGES
+### draw py
+    Using opt4.py ,an Genetic Algorithm (GA), to estimate 
+    the best contrast and brightness parameter for the input image. (judge by score)
 
-```
+    Compare with all the possibility contrast and brightness combination to the input image,
+    output a 3D graph shows the whole combination score distributes ans where the GA score locates.
 
-Train model
-```bash
-python nima/cli.py train_model --path_to_save_csv $PATH_TO_CSV \
-                                --path_to_images $PATH_TO_IMAGES \
-                                --batch_size $BATCH_SIZE \
-                                --num_workers $NUM_WORKERS \
-                                --num_epoch $NUM_EPOCH \
-                                --init_lr $INIT_LR \
-                                --experiment_dir_name $EXPERIMENT_DIR_NAME
+### get_adjust py
+    A tool that can get the adjust image depends on the input given.
+
+    The output will pop up a window shows the image adjust with the parameter inputs.
 
 
-```
-Use tensorboard to tracking training progress
+### get_high py
+    A tool that can get the highest score image form the directory chosen.
+    Score calculate by the txt file AVA provided for made by user.
 
-```bash
-tensorboard --logdir .
-```
-Validate model on val and test datasets
-```bash
-python nima/cli.py validate_model --path_to_model_weight ./pretrain-model.pth \
-                                    --path_to_save_csv $PATH_TO_CSV \
-                                    --path_to_images $PATH_TO_IMAGES \
-                                    --batch_size $BATCH_SIZE \
-                                    --num_workers $NUM_EPOCH
-```
-Get scores for one image
-```bash
-python nima/cli.py get_image_score --path_to_model_weight ./pretrain-model.pth --path_to_image test_image.jpg
-```
-   
-## Contributing
+    txt format : (Copy from AVA Dataset)
 
-Contributing are welcome
+    **************************************************************************
+    Content of AVA.txt
+    **************************************************************************
 
+    Column 1: Index
 
-## License
+    Column 2: Image ID 
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
+    Columns 3 - 12: Counts of aesthetics ratings on a scale of 1-10. Column 3 
+    has counts of ratings of 1 and column 12 has counts of ratings of 10.
 
-## Acknowledgments
+    Columns 13 - 14: Semantic tag IDs. There are 66 IDs ranging from 1 to 66.
+    The file tags.txt contains the textual tag corresponding to the numerical
+    id. Each image has between 0 and 2 tags. Images with less than 2 tags have
+    a "0" in place of the missing tag(s).
 
-* [neural-image-assessment in keras](https://github.com/titu1994/neural-image-assessment)
-* [Neural-IMage-Assessment in pytorch](https://github.com/kentsyx/Neural-IMage-Assessment)
-* [pytorch-mobilenet-v2](https://github.com/tonylins/pytorch-mobilenet-v2)
-* [origin NIMA article](https://arxiv.org/abs/1709.05424)
-* [origin MobileNetV2 article](https://arxiv.org/pdf/1801.04381)
-* [Post at Google Research Blog](https://research.googleblog.com/2017/12/introducing-nima-neural-image-assessment.html)
-* [Heroku: Cloud Application Platform](https://www.heroku.com/)
+    Column 15: Challenge ID. The file challenges.txt contains the name of 
+    the challenge corresponding to each ID.
+    **************************************************************************
+
+### opt4 py
+    A Genetic Algorithm (GA)(中文:基因型演算法) approach 
+    to get the highest score from adjusting input image by brightness and contrast.
+
+    Using half of time compare to finding the high score from trying all combinations.
+    (Time messure calculate by messure_opt4.py and nima/nima_adjust.py)
+
+    USAGE:
+        From terminal:
+            python opt4.py (YOUR_IMAGE_PATH) 
+        From Other Files:
+            import opt4
+            opt4.starts(YOUR_IMAGE_PATH)
+
+    BE AWARE:
+        The model pth is fixed in this file, moodify it if any changes
+        (at around line no. 264)
+
+### tmpXXX floders
+    XXX means the date the model trainned or the ordered.
+    the epoch of model inside the folder is mention on the filename.
+    usually we uses the last epoch of the training, unless the validation has less loss rate.
+
+### nima/nima_new py
+    The main file the image Testing and image Adjust is done.
+
+### nima/nima_adjust py
+    An old version of adjusting image by fixed contrast and brightness, or all combinations of contrast and brightness.
