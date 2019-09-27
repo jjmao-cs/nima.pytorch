@@ -1,0 +1,1 @@
+{"path_to_save_csv": "./image/", "path_to_images": "./image/image/", "experiment_dir_name": "./tmp2/", "batch_size": 16, "num_workers": 1, "num_epoch": 50, "init_lr": 0.0001}
