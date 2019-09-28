@@ -91,6 +91,14 @@
     XXX means the date the model trainned or the ordered.
     the epoch of model inside the folder is mention on the filename.
     usually we uses the last epoch of the training, unless the validation has less loss rate.
+    
+    Our model only trains on part of the AVA Dataset image, which has the fellowing tags.
+     20 Architecture
+     21 Black and White
+     2 Cityscape
+     23 Travel
+     10 Urban
+     14 Landscape
 
 ### nima/nima_new py
     The main file the image Testing and image Adjust is done.
