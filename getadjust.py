@@ -51,7 +51,7 @@ def apply_brightness_contrast(input_img, brightness = 0, contrast = 0):
     #test#
 
 
-b = sys.argv[2]
-c = sys.argv[3]
+b = int(sys.argv[2])
+c = int(sys.argv[3])
 img = cv2.imread(sys.argv[1])
 apply_brightness_contrast(img, b, c)
