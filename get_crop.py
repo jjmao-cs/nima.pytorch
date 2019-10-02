@@ -1,9 +1,11 @@
+'''
+Dev Test Function
+
+'''
+
 from PIL import Image
 import os,sys,json,cv2,collections
 import numpy as np
-
-#imfile, box = sys.argv[1], sys.argv[2]
-
 
 
 def adjust():

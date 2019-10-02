@@ -5,6 +5,9 @@ the best contrast and brightness parameter for the input image. (judge by score)
 Compare with all the possibility contrast and brightness combination to the input image,
 output a 3D graph shows the whole combination score distributes ans where the GA score locates.
 
+USAGE:(in command line)
+    python draw.py $YOUR_IMAGE_PATH
+
 By. Jonathan J. Mao  (jjmao.cs@gmail.com)
 '''
 

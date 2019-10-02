@@ -1,3 +1,12 @@
+'''
+Using OpenCV to adjust input image's brightness and contrast
+
+USAGE:(in command line)
+    python getadjust.py $YOUR_IMAGE_PATH $BRUGHTNESS $CONTRAST
+
+By. Jonathan J. Mao  (jjmao.cs@gmail.com)
+'''
+
 import cv2, sys, os, copy
 import numpy as np
 from itertools import product
@@ -42,7 +51,7 @@ def apply_brightness_contrast(input_img, brightness = 0, contrast = 0):
     #test#
 
 
-b = -20
-c = 60
+b = sys.argv[2]
+c = sys.argv[3]
 img = cv2.imread(sys.argv[1])
 apply_brightness_contrast(img, b, c)
